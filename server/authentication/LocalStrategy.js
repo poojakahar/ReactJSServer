@@ -16,14 +16,18 @@ passport.use(new LocalStrategy((username, password, done) => {
   con.query("SELECT * from users where username = '" + username + "' and password = '" + password + "'", (err, response) => {
     if (err) return done(null,false);
 
-    let id = response[0].id;
-    let token  = jwt.sign({_id: id}, 'MOVIE').toString();
+    if(response && response.length > 0) {
+      let id = response[0].id;
+      let token  = jwt.sign({_id: id}, 'MOVIE').toString();
 
-    con.query("UPDATE users set token='" + token + "' where id = " + id, (err, res) => {
-      if(err) return done(null,false);
-      Token = token;
-      return done(null, true);
-    });
+      con.query("UPDATE users set token='" + token + "' where id = " + id, (err, res) => {
+        if(err) return done(null,false);
+        Token = token;
+        return done(null, true);
+      });
+    } else {
+      return done(null,false);
+    }
   });
 }));
 

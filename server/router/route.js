@@ -9,7 +9,7 @@ exports.route = (app) => {
   });
 
   app.get('/fail', (req, res) => {
-    res.status(404).json("Login Fail");
+    res.status(404).json({Error: "Fail: Please check your username and password"});
   });
 
   app.get('/api/users', userController.getAll);
@@ -21,10 +21,10 @@ exports.route = (app) => {
 
   // app.post('/api/auth_user', userController.SignIn);
 
-  app.get('/api/movie', movieController.getAll);
-  app.get('/api/movie/:id', movieController.getOne);
-  app.post('/api/movie', movieController.new);
-  app.put('/api/movie/:id', movieController.edit);
-  app.delete('/api/movie/:id', movieController.remove);
-  app.get('/api/search/movie', movieController.search);
+  app.get('/api/movie', authorization, movieController.getAll);
+  app.get('/api/movie/:id', authorization, movieController.getOne);
+  app.post('/api/movie', authorization, movieController.new);
+  app.put('/api/movie/:id', authorization, movieController.edit);
+  app.delete('/api/movie/:id', authorization, movieController.remove);
+  app.get('/api/search/movie', authorization, movieController.search);
 };

@@ -58,6 +58,11 @@ exports.search = (req,res) => {
   const name = req.query.name;
   con.query("SELECT * from movies where name like '%" + name + "%'", (err, response) => {
     if (err) return res.status(400).json(err);
-    return res.status(200).json(response);
+
+    if(response && response.length > 0) {
+      return res.status(200).json(response);
+    } else {
+      return res.status(201).json("No record found");
+    }
   });
 };
